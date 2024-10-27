@@ -3,7 +3,7 @@ pkgver=6.6.58
 pkgrel=1
 arch=(x86_64)
 license=(GPL-2.0-only)
-provides=(linux-lts linux-lts-headers)
+provides=(linux-lts linux-lts-headers linux-api-headers)
 
 _srcname=linux-$pkgver
 _srctag=v$pkgver
@@ -21,6 +21,7 @@ makedepends=(
   python
   tar
   xz
+  rsync
 )
 
 options=(!strip)
