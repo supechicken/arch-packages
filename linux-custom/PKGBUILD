@@ -1,0 +1,83 @@
+pkgname=linux-custom
+pkgver=6.6.58
+pkgrel=1
+arch=(x86_64)
+license=(GPL-2.0-only)
+provides=(linux-lts linux-lts-headers)
+
+_srcname=linux-$pkgver
+_srctag=v$pkgver
+
+makedepends=(
+  llvm
+  clang
+  lld
+  bc
+  cpio
+  gettext
+  libelf
+  pahole
+  perl
+  python
+  tar
+  xz
+)
+
+options=(!strip)
+
+source=(
+  https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.xz
+  git+https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts.git/#commit=e1644ef10a26bdadcd7ccf12460c575f5ebb64a7
+  git+https://gitlab.com/xanmod/linux-patches.git/
+  config  # the main kernel config file
+)
+
+sha256sums=(
+  'SKIP'
+  'SKIP'
+  'SKIP'
+  'SKIP'
+)
+
+export KBUILD_BUILD_HOST=archlinux
+export KBUILD_BUILD_USER=supechicken
+
+prepare() {
+  cd $_srcname
+
+  for p in ../linux-lts/*.patch ../linux-patches/linux-6.6.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch; do
+    echo "Applying patch $p..."
+    patch -Np1 < $p
+  done
+
+  echo "Setting config..."
+  cp ../config .config
+  make ARCH=x86_64 LLVM=1 LLVM_IAS=1 olddefconfig
+  diff -Nur --color ../config .config || :
+
+  make -s kernelrelease > version
+  echo "Prepared $pkgbase version $(<version)"
+}
+
+build() {
+  cd $_srcname
+
+  make ARCH=x86_64 LLVM=1 LLVM_IAS=1 bzImage -j$(nproc)
+  make ARCH=x86_64 LLVM=1 LLVM_IAS=1 modules -j$(nproc)
+}
+
+package() {
+  mkdir -p $pkgdir/{boot,usr}
+  cd $_srcname
+
+  make ARCH=x86_64 LLVM=1 LLVM_IAS=1 INSTALL_HDR_PATH=$pkgdir/usr headers_install -j$(nproc)
+
+  ZSTD_CLEVEL=19 make \
+    ARCH=x86_64 LLVM=1 LLVM_IAS=1 \
+    DEPMOD=/doesnt/exist \
+    INSTALL_MOD_PATH="$pkgdir/usr" \
+    INSTALL_MOD_STRIP=1 \
+    modules_install -j$(nproc)
+
+  install -Dm644 arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-custom
+}
