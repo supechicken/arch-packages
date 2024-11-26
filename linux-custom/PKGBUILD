@@ -4,9 +4,7 @@ pkgrel=1
 arch=(x86_64)
 license=(GPL-2.0-only)
 provides=(linux-lts linux-lts-headers linux-api-headers)
-
-_srcname=linux-$pkgver
-_srctag=v$pkgver
+conflicts=(linux-lts linux-lts-headers linux-api-headers)
 
 makedepends=(
   llvm
@@ -21,30 +19,27 @@ makedepends=(
   python
   tar
   xz
+  zstd
   rsync
 )
 
 options=(!strip)
 
 source=(
-  https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.xz
+  #https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.xz
+  git+https://github.com/intel/linux-intel-lts.git/#tag=lts-v6.6.58-linux-241108T122510Z
   git+https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts.git/#commit=e1644ef10a26bdadcd7ccf12460c575f5ebb64a7
   git+https://gitlab.com/xanmod/linux-patches.git/
   config  # the main kernel config file
 )
 
-sha256sums=(
-  'SKIP'
-  'SKIP'
-  'SKIP'
-  'SKIP'
-)
+sha256sums=(SKIP SKIP SKIP SKIP)
 
-export KBUILD_BUILD_HOST=archlinux
+export KBUILD_BUILD_HOST=Jumper-MiniPC
 export KBUILD_BUILD_USER=supechicken
 
 prepare() {
-  cd $_srcname
+  cd linux-intel-lts/
 
   for p in ../linux-lts/*.patch ../linux-patches/linux-6.6.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch; do
     echo "Applying patch $p..."
@@ -61,7 +56,7 @@ prepare() {
 }
 
 build() {
-  cd $_srcname
+  cd linux-intel-lts/
 
   make ARCH=x86_64 LLVM=1 LLVM_IAS=1 bzImage -j$(nproc)
   make ARCH=x86_64 LLVM=1 LLVM_IAS=1 modules -j$(nproc)
@@ -69,7 +64,7 @@ build() {
 
 package() {
   mkdir -p $pkgdir/{boot,usr}
-  cd $_srcname
+  cd linux-intel-lts/
 
   make ARCH=x86_64 LLVM=1 LLVM_IAS=1 INSTALL_HDR_PATH=$pkgdir/usr headers_install -j$(nproc)
 
