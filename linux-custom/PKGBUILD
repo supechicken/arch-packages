@@ -66,6 +66,8 @@ package() {
   mkdir -p $pkgdir/{boot,usr}
   cd linux-intel-lts/
 
+  local modulesdir="$pkgdir/usr/lib/modules/$(<version)"
+
   make ARCH=x86_64 LLVM=1 LLVM_IAS=1 INSTALL_HDR_PATH=$pkgdir/usr headers_install -j$(nproc)
 
   ZSTD_CLEVEL=19 make \
@@ -75,5 +77,18 @@ package() {
     INSTALL_MOD_STRIP=1 \
     modules_install -j$(nproc)
 
+  echo "Removing documentation..."
+  rm -r Documentation
+
+  echo "Removing loose objects..."
+  find . -type f -name '*.o' -printf 'Removing %P\n' -delete
+
+  # Used by mkinitcpio to name the kernel
+  echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
+
+  mkdir -p $pkgdir/usr/src
+  cp -r . $pkgdir/usr/src/$pkgbase
+
+  ln -sf /usr/src/$pkgbase $modulesdir/build
   install -Dm644 arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-custom
 }
