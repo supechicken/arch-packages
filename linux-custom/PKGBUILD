@@ -27,7 +27,7 @@ options=(!strip)
 
 source=(
   #https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.xz
-  git+https://github.com/intel/linux-intel-lts.git/#commit=aff52723c5d6089d65ea473d150c7d3886209612
+  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.6.58-linux-241108T122510Z.tar.gz
   git+https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts.git/#commit=e1644ef10a26bdadcd7ccf12460c575f5ebb64a7
   git+https://gitlab.com/xanmod/linux-patches.git/
   config  # the main kernel config file
