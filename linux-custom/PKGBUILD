@@ -48,7 +48,7 @@ export KBUILD_BUILD_USER=supechicken
 prepare() {
   cd $SRCNAME
 
-  for p in ${_patches}; do
+  for p in ${_patches[@]}; do
     echo "Applying patch $p..."
     patch -Np1 < $p
   done
