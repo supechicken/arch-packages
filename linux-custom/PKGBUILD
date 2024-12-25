@@ -33,7 +33,7 @@ source=(
   config  # the main kernel config file
 )
 
-sha256sums=(SKIP SKIP SKIP SKIP)
+sha256sums=(SKIP SKIP SKIP SKIP SKIP)
 
 _patches=(
   ../linux-lts-*/*.patch # arch patches
