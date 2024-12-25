@@ -48,10 +48,12 @@ export KBUILD_BUILD_USER=supechicken
 prepare() {
   cd $SRCNAME
 
+  shopt -s nullglob
   for p in ${_patches[@]}; do
-    echo "Applying patch $p..."
+    echo -e "\e[1;33mApplying patch $p...\e[0m"
     patch -Np1 < $p
   done
+  shopt -u nullglob
 
   echo "Setting config..."
   cp ../config .config
