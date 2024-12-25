@@ -36,22 +36,22 @@ source=(
 sha256sums=(SKIP SKIP SKIP SKIP SKIP)
 
 _openwrt_patches=(
-  hack-6.6/645-netfilter-connmark-introduce-set-dscpmark.patch
-  hack-6.6/650-netfilter-add-xt_FLOWOFFLOAD-target.patch
-  hack-6.6/660-fq_codel_defaults.patch
-  hack-6.6/661-kernel-ct-size-the-hashtable-more-adequately.patch
-  hack-6.6/721-net-add-packet-mangeling.patch
-  hack-6.6/790-SFP-GE-T-ignore-TX_FAULT.patch
-  pending-6.6/150-bridge_allow_receiption_on_disabled_port.patch
-  pending-6.6/151-net-bridge-do-not-send-arp-replies-if-src-and-target.patch
-  pending-6.6/6*.patch
-  pending-6.6/7*-{netfilter,bridge}*.patch
+  ../openwrt-*/target/linux/generic/backport-6.6/*.patch
+  ../openwrt-*/target/linux/generic/hack-6.6/645-netfilter-connmark-introduce-set-dscpmark.patch
+  ../openwrt-*/target/linux/generic/hack-6.6/650-netfilter-add-xt_FLOWOFFLOAD-target.patch
+  ../openwrt-*/target/linux/generic/hack-6.6/660-fq_codel_defaults.patch
+  ../openwrt-*/target/linux/generic/hack-6.6/661-kernel-ct-size-the-hashtable-more-adequately.patch
+  ../openwrt-*/target/linux/generic/hack-6.6/721-net-add-packet-mangeling.patch
+  ../openwrt-*/target/linux/generic/hack-6.6/790-SFP-GE-T-ignore-TX_FAULT.patch
+  ../openwrt-*/target/linux/generic/pending-6.6/150-bridge_allow_receiption_on_disabled_port.patch
+  ../openwrt-*/target/linux/generic/pending-6.6/151-net-bridge-do-not-send-arp-replies-if-src-and-target.patch
+  ../openwrt-*/target/linux/generic/pending-6.6/6*.patch
+  ../openwrt-*/target/linux/generic/pending-6.6/7*-{netfilter,bridge}*.patch
 )
+
 _patches=(
   ../linux-lts-*/*.patch # arch patches
   ../linux-patches-*/linux-6.6.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
-  ../openwrt-*/target/linux/generic/backport-6.6/*.patch # openwrt backport patches
-  
 )
 
 export SRCNAME=linux-intel-lts-lts-*/
@@ -62,7 +62,7 @@ prepare() {
   cd $SRCNAME
 
   shopt -s nullglob
-  for p in ${_patches[@]}; do
+  for p in ${_patches[@]} ${_openwrt_patches[@]}; do
     echo -e "\e[1;33mApplying patch $p...\e[0m"
     patch -Np1 < $p
   done
