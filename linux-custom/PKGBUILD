@@ -1,5 +1,5 @@
 pkgname=linux-custom
-pkgver=6.6.58
+pkgver=6.6.65
 pkgrel=1
 arch=(x86_64)
 license=(GPL-2.0-only)
@@ -26,23 +26,29 @@ makedepends=(
 options=(!strip)
 
 source=(
-  #https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.xz
-  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.6.58-linux-241108T122510Z.tar.gz
-  git+https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts.git/#commit=e1644ef10a26bdadcd7ccf12460c575f5ebb64a7
-  git+https://gitlab.com/xanmod/linux-patches.git/
+  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.6.65-linux-241218T004222Z.tar.gz
+  https://github.com/openwrt/openwrt/archive/refs/tags/v24.10.0-rc4.tar.gz
+  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.6.65-2/linux-lts-6.6.65-2.tar.gz
+  https://gitlab.com/xanmod/linux-patches/-/archive/72c888e879f321c68e1e1a91d1ef9e5996fe518a/linux-patches-72c888e879f321c68e1e1a91d1ef9e5996fe518a.tar.gz
   config  # the main kernel config file
 )
 
 sha256sums=(SKIP SKIP SKIP SKIP)
 
-export SRCNAME=linux-intel-lts-lts-v6.6.58-linux-241108T122510Z
+_patches=(
+  ../linux-lts-6.6.65-2/*.patch # arch patches
+  ../linux-patches-72c888e879f321c68e1e1a91d1ef9e5996fe518a/linux-6.6.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
+  ../openwrt-v24.10.0-rc4/target/linux/generic/{backport,hack,pending}-6.6/*.patch # openwrt patches
+)
+
+export SRCNAME=linux-intel-lts-lts-*/
 export KBUILD_BUILD_HOST=Jumper-MiniPC
 export KBUILD_BUILD_USER=supechicken
 
 prepare() {
   cd $SRCNAME
 
-  for p in ../linux-lts/*.patch ../linux-patches/linux-6.6.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch; do
+  for p in ${_patches}; do
     echo "Applying patch $p..."
     patch -Np1 < $p
   done
