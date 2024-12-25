@@ -36,9 +36,9 @@ source=(
 sha256sums=(SKIP SKIP SKIP SKIP)
 
 _patches=(
-  ../linux-lts-6.6.65-2/*.patch # arch patches
-  ../linux-patches-72c888e879f321c68e1e1a91d1ef9e5996fe518a/linux-6.6.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
-  ../openwrt-v24.10.0-rc4/target/linux/generic/{backport,hack,pending}-6.6/*.patch # openwrt patches
+  ../linux-lts-*/*.patch # arch patches
+  ../linux-patches-*/linux-6.6.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
+  ../openwrt-*/target/linux/generic/{backport,hack,pending}-6.6/*.patch # openwrt patches
 )
 
 export SRCNAME=linux-intel-lts-lts-*/
