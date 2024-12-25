@@ -36,7 +36,8 @@ source=(
 sha256sums=(SKIP SKIP SKIP SKIP SKIP)
 
 _openwrt_patches=(
-  ../openwrt-*/target/linux/generic/backport-6.6/*.patch
+  ../openwrt-*/target/linux/generic/backport-6.6/6*.patch
+  ../openwrt-*/target/linux/generic/backport-6.6/700-v6.10-net-create-a-dummy-net_device-allocator.patch
   ../openwrt-*/target/linux/generic/hack-6.6/645-netfilter-connmark-introduce-set-dscpmark.patch
   ../openwrt-*/target/linux/generic/hack-6.6/650-netfilter-add-xt_FLOWOFFLOAD-target.patch
   ../openwrt-*/target/linux/generic/hack-6.6/660-fq_codel_defaults.patch
