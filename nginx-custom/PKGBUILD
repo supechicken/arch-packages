@@ -58,7 +58,7 @@ _common_flags=(
   --with-threads
 )
 
-_nginx_cflags='-Wno-unused-command-line-argument -fuse-ld=mold -flto=thin -O3'
+_nginx_cflags='-Wno-unused-command-line-argument -fuse-ld=lld -flto=thin -O3'
 
 _nginx_env() {
   CC=clang CXX=clang++ CFLAGS="${_nginx_cflags}" CXXFLAGS="${_nginx_cflags}" "${@}"
@@ -68,8 +68,8 @@ build() {
   (
     cd openssl-*-quic/
     _nginx_env ./config --prefix=$(pwd)/build no-shared
-    _nginx_env make -j"$(nproc)"
-    _nginx_env make install_sw -j"$(nproc)"
+    _nginx_env make -j6
+    _nginx_env make install_sw -j6
   )
 
   (
@@ -97,13 +97,13 @@ build() {
       --with-ld-opt="-L../openssl-openssl-3.1.7-quic/build/lib64" \
       "${_common_flags[@]}"
 
-    _nginx_env make -j"$(nproc)"
+    _nginx_env make -j6
   )
 }
 
 package() {
   cd nginx-*/
-  make DESTDIR="$pkgdir" install -j"$(nproc)"
+  make DESTDIR="$pkgdir" install -j6
 
   sed -e 's|\<user\s\+\w\+;|user http;|g' \
     -e '44s|html|/usr/share/nginx/html|' \
