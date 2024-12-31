@@ -66,7 +66,7 @@ _nginx_env() {
 
 build() {
   (
-    cd openssl-*+quic-*/
+    cd openssl-*+quic/
     _nginx_cflags ./config --prefix=$(pwd)/build no-shared
     _nginx_cflags make -j"$(nproc)"
     _nginx_cflags make install_sw -j"$(nproc)"
