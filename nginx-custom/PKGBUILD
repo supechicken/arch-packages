@@ -66,7 +66,7 @@ _nginx_env() {
 
 build() {
   (
-    cd openssl-*+quic/
+    cd openssl-*-quic/
     _nginx_cflags ./config --prefix=$(pwd)/build no-shared
     _nginx_cflags make -j"$(nproc)"
     _nginx_cflags make install_sw -j"$(nproc)"
@@ -93,8 +93,8 @@ build() {
       --add-module=../ngx_brotli-a71f9312c2deb28875acc7bacfdd5695a111aa53 \
       --add-module=../nginx-http-auth-digest-5a2cae4812d8a1ba5f83dfbcb8d043d05c8e6f97 \
       --add-module=../ngx_http_geoip2_module-445df24ef3781e488cee3dfe8a1e111997fc1dfe \
-      --with-cc-opt="-I../openssl-openssl-3.1.7+quic/build/include ${_nginx_cflags}" \
-      --with-ld-opt="-L../openssl-openssl-3.1.7+quic/build/lib64" \
+      --with-cc-opt="-I../openssl-openssl-3.1.7-quic/build/include ${_nginx_cflags}" \
+      --with-ld-opt="-L../openssl-openssl-3.1.7-quic/build/lib64" \
       "${_common_flags[@]}"
 
     _nginx_cflags make -j"$(nproc)"
