@@ -23,7 +23,7 @@ source=(
   logrotate
 )
 
-sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP)
+sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP SKIP SKIP)
 
 _common_flags=(
   --with-compat
