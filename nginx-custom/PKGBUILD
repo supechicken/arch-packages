@@ -106,7 +106,7 @@ build() {
 }
 
 package() {
-  cd nginx-*/
+  cd nginx-1.*/
   make DESTDIR="$pkgdir" install -j6
 
   sed -e 's|\<user\s\+\w\+;|user http;|g' \
