@@ -65,7 +65,7 @@ _nginx_env() {
 }
 
 prepare() {
-  git -C ngx_brotli submodule init --update
+  git -C ngx_brotli submodule update --init
 }
 
 build() {
