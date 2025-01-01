@@ -58,7 +58,7 @@ _common_flags=(
   --with-threads
 )
 
-_nginx_cflags='-Wno-unused-command-line-argument -fuse-ld=mold -flto=thin -O3'
+_nginx_cflags='-Wno-unused-command-line-argument -fuse-ld=lld -O3'
 
 _nginx_env() {
   CC=clang CXX=clang++ CFLAGS="${_nginx_cflags}" CXXFLAGS="${_nginx_cflags}" "${@}"
