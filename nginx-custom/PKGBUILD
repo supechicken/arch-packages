@@ -73,7 +73,7 @@ build() {
   )
 
   (
-    cd nginx-*/
+    cd nginx-1.*/
     _nginx_env ./configure \
       --prefix=/etc/nginx \
       --conf-path=/etc/nginx/nginx.conf \
