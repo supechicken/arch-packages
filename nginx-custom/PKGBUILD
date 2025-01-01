@@ -14,11 +14,11 @@ conflicts=(nginx)
 
 source=(
   https://nginx.org/download/nginx-1.27.3.tar.gz
-  https://github.com/quictls/openssl/archive/refs/heads/openssl-3.1.7+quic.tar.gz
-  https://github.com/tokers/zstd-nginx-module/archive/f4ba115e0b0eaecde545e5f37db6aa18917d8f4b.tar.gz
-  https://github.com/google/ngx_brotli/archive/a71f9312c2deb28875acc7bacfdd5695a111aa53.tar.gz
-  https://github.com/samizdatco/nginx-http-auth-digest/archive/5a2cae4812d8a1ba5f83dfbcb8d043d05c8e6f97.tar.gz
-  https://github.com/leev/ngx_http_geoip2_module/archive/445df24ef3781e488cee3dfe8a1e111997fc1dfe.tar.gz
+  git+https://github.com/quictls/openssl#tag=openssl-3.1.7+quic
+  git+https://github.com/tokers/zstd-nginx-module#commit=f4ba115e0b0eaecde545e5f37db6aa18917d8f4b
+  git+https://github.com/google/ngx_brotli#commit=a71f9312c2deb28875acc7bacfdd5695a111aa53
+  git+https://github.com/samizdatco/nginx-http-auth-digest#commit=5a2cae4812d8a1ba5f83dfbcb8d043d05c8e6f97
+  git+https://github.com/leev/ngx_http_geoip2_module#commit=445df24ef3781e488cee3dfe8a1e111997fc1dfe
   nginx.service
   logrotate
 )
@@ -58,15 +58,19 @@ _common_flags=(
   --with-threads
 )
 
-_nginx_cflags='-Wno-unused-command-line-argument -fuse-ld=lld -flto=thin -O3'
+_nginx_cflags='-Wno-unused-command-line-argument -fuse-ld=lld'
 
 _nginx_env() {
   CC=clang CXX=clang++ CFLAGS="${_nginx_cflags}" CXXFLAGS="${_nginx_cflags}" "${@}"
 }
 
+prepare() {
+  git -C ngx_brotli submodule init --update
+}
+
 build() {
   (
-    cd openssl-*-quic/
+    cd openssl/
     _nginx_env ./config --prefix=$(pwd)/build no-shared
     _nginx_env make -j6
     _nginx_env make install_sw -j6
@@ -89,12 +93,12 @@ build() {
       --http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
       --http-scgi-temp-path=/var/lib/nginx/scgi \
       --http-uwsgi-temp-path=/var/lib/nginx/uwsgi \
-      --add-module=../zstd-nginx-module-f4ba115e0b0eaecde545e5f37db6aa18917d8f4b \
-      --add-module=../ngx_brotli-a71f9312c2deb28875acc7bacfdd5695a111aa53 \
-      --add-module=../nginx-http-auth-digest-5a2cae4812d8a1ba5f83dfbcb8d043d05c8e6f97 \
-      --add-module=../ngx_http_geoip2_module-445df24ef3781e488cee3dfe8a1e111997fc1dfe \
-      --with-cc-opt="-I../openssl-openssl-3.1.7-quic/build/include ${_nginx_cflags}" \
-      --with-ld-opt="-L../openssl-openssl-3.1.7-quic/build/lib64" \
+      --add-module=../zstd-nginx-module \
+      --add-module=../ngx_brotli \
+      --add-module=../nginx-http-auth-digest \
+      --add-module=../ngx_http_geoip2_module \
+      --with-cc-opt="-I../openssl/build/include ${_nginx_cflags}" \
+      --with-ld-opt="-L../openssl/build/lib64" \
       "${_common_flags[@]}"
 
     _nginx_env make -j6
