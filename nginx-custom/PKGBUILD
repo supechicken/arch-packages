@@ -1,11 +1,11 @@
 pkgname=nginx-custom
-pkgver=1.27.3
+pkgver=1.26.2
 pkgrel=1
 arch=(x86_64)
 pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server'
 url='https://nginx.org'
 license=(BSD-2-Clause)
-depends=(glibc pcre2 zlib openssl geoip mailcap libxcrypt)
+depends=(glibc pcre2 zlib openssl geoip mailcap libxcrypt brotli libmaxminddb)
 makedepends=(mercurial pcre2 zlib openssl geoip mailcap libxcrypt llvm clang mold)
 checkdepends=(perl perl-gd perl-io-socket-ssl perl-fcgi perl-cache-memcached
               perl-cryptx memcached ffmpeg coreutils)
@@ -13,12 +13,13 @@ provides=(nginx)
 conflicts=(nginx)
 
 source=(
-  https://nginx.org/download/nginx-1.27.3.tar.gz
+  https://nginx.org/download/nginx-1.26.2.tar.gz
   git+https://github.com/quictls/openssl#tag=openssl-3.1.7+quic
   git+https://github.com/tokers/zstd-nginx-module#commit=f4ba115e0b0eaecde545e5f37db6aa18917d8f4b
   git+https://github.com/google/ngx_brotli#commit=a71f9312c2deb28875acc7bacfdd5695a111aa53
   git+https://github.com/samizdatco/nginx-http-auth-digest#commit=5a2cae4812d8a1ba5f83dfbcb8d043d05c8e6f97
   git+https://github.com/leev/ngx_http_geoip2_module#commit=445df24ef3781e488cee3dfe8a1e111997fc1dfe
+  git+https://github.com/openresty/headers-more-nginx-module#commit=f8f80997f19a41dc4181987544b9f3570cc3d6da
   nginx.service
   logrotate
 )
@@ -97,6 +98,7 @@ build() {
       --add-module=../ngx_brotli \
       --add-module=../nginx-http-auth-digest \
       --add-module=../ngx_http_geoip2_module \
+      --add-module=../headers-more-nginx-module \
       --with-cc-opt="-I../openssl/build/include ${_nginx_cflags}" \
       --with-ld-opt="-L../openssl/build/lib64" \
       "${_common_flags[@]}"
