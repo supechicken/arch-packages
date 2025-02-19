@@ -74,7 +74,7 @@ prepare() {
 
 build() {
   (
-    cd openssl/
+    cd quictls/
     _nginx_env ./config --prefix=$(pwd)/build no-shared
     _nginx_env make -j6
     _nginx_env make install_sw -j6
@@ -101,8 +101,8 @@ build() {
       --add-module=../ngx_brotli \
       --add-module=../nginx-http-auth-digest \
       --add-module=../ngx_http_geoip2_module \
-      --with-cc-opt="-I../openssl/build/include ${_nginx_cflags}" \
-      --with-ld-opt="-L../openssl/build/lib64" \
+      --with-cc-opt="-I../quictls/build/include ${_nginx_cflags}" \
+      --with-ld-opt="-L../quictls/build/lib64" \
       "${_common_flags[@]}"
 
     _nginx_env make -j6
