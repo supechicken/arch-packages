@@ -1,5 +1,5 @@
 pkgname=nginx-custom
-pkgver=1.26.2
+pkgver=1.27.4
 pkgrel=1
 arch=(x86_64)
 pkgdesc='Lightweight HTTP server and IMAP/POP3 proxy server'
@@ -13,9 +13,9 @@ provides=(nginx)
 conflicts=(nginx)
 
 source=(
-  https://nginx.org/download/nginx-1.26.2.tar.gz
+  https://nginx.org/download/nginx-1.27.4.tar.gz
   https://patch-diff.githubusercontent.com/raw/nginx/nginx/pull/293.patch
-  git+https://github.com/quictls/openssl#tag=openssl-3.1.7+quic
+  git+https://github.com/quictls/quictls#commit=fe8d323f2c2bd77320d775f55d40df95fe7cb0aa
   git+https://github.com/tokers/zstd-nginx-module#commit=f4ba115e0b0eaecde545e5f37db6aa18917d8f4b
   git+https://github.com/google/ngx_brotli#commit=a71f9312c2deb28875acc7bacfdd5695a111aa53
   git+https://github.com/samizdatco/nginx-http-auth-digest#commit=5a2cae4812d8a1ba5f83dfbcb8d043d05c8e6f97
