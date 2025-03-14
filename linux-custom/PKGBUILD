@@ -29,10 +29,11 @@ source=(
   https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.13-linux-250212T000422Z.tar.gz
   https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.13-1/linux-lts-6.12.13-1.tar.gz
   https://gitlab.com/xanmod/linux-patches/-/archive/master/linux-patches-master.tar.gz
+  0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   jumper-config  # the main kernel config file
 )
 
-sha256sums=(SKIP SKIP SKIP SKIP)
+sha256sums=(SKIP SKIP SKIP SKIP SKIP)
 
 #_openwrt_patches=(
 #  ../openwrt-*/target/linux/generic/backport-6.6/6*.patch
@@ -50,6 +51,7 @@ sha256sums=(SKIP SKIP SKIP SKIP)
 #)
 
 _patches=(
+  ../0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   ../linux-lts-*/*.patch # arch patches
   ../linux-patches-*/linux-6.6.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
 )
