@@ -45,7 +45,7 @@ index a1c31c3bbdc3..0499be80d23d 100644
  }
  
 +static ssize_t total_pools_kb_show(struct kobject *kobj,
-+				  struct kobj_attribute *attr, char *buf)
++				   struct kobj_attribute *attr, char *buf)
 +{
 +	struct dma_heap *heap;
 +	u64 total_pool_size = 0;
@@ -138,12 +138,13 @@ index c4c9766ca6c3..c31af802ea86 100644
   * allocate returns dmabuf on success, ERR_PTR(-errno) on error.
   */
 @@ -24,6 +25,7 @@ struct dma_heap_ops {
- 				   unsigned long len,
- 				   u32 fd_flags,
- 				   u64 heap_flags);
+ 				    unsigned long len,
+ 				    u32 fd_flags,
+ 				    u64 heap_flags);
 +	long (*get_pool_size)(struct dma_heap *heap);
  };
  
  /**
 -- 
 2.48.1
+
