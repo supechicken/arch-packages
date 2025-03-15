@@ -1,5 +1,5 @@
 pkgname=linux-custom
-pkgver=6.12.13
+pkgver=6.12.17
 pkgrel=1
 arch=(x86_64)
 license=(GPL-2.0-only)
@@ -26,29 +26,14 @@ makedepends=(
 options=(!strip)
 
 source=(
-  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.13-linux-250212T000422Z.tar.gz
-  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.13-1/linux-lts-6.12.13-1.tar.gz
+  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.17-linux-250228T052357Z.tar.gz
+  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.17-1/linux-lts-6.12.17-1.tar.gz
   https://gitlab.com/xanmod/linux-patches/-/archive/master/linux-patches-master.tar.gz
   0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   jumper-config  # the main kernel config file
 )
 
 sha256sums=(SKIP SKIP SKIP SKIP SKIP)
-
-#_openwrt_patches=(
-#  ../openwrt-*/target/linux/generic/backport-6.6/6*.patch
-#  ../openwrt-*/target/linux/generic/backport-6.6/700-v6.10-net-create-a-dummy-net_device-allocator.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/645-netfilter-connmark-introduce-set-dscpmark.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/650-netfilter-add-xt_FLOWOFFLOAD-target.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/660-fq_codel_defaults.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/661-kernel-ct-size-the-hashtable-more-adequately.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/721-net-add-packet-mangeling.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/790-SFP-GE-T-ignore-TX_FAULT.patch
-#  ../openwrt-*/target/linux/generic/pending-6.6/150-bridge_allow_receiption_on_disabled_port.patch
-#  ../openwrt-*/target/linux/generic/pending-6.6/151-net-bridge-do-not-send-arp-replies-if-src-and-target.patch
-#  ../openwrt-*/target/linux/generic/pending-6.6/6*.patch
-#  ../openwrt-*/target/linux/generic/pending-6.6/7*-{netfilter,bridge}*.patch
-#)
 
 _patches=(
   ../0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
@@ -115,5 +100,5 @@ package() {
   cp -r . $pkgdir/usr/src/$pkgbase
 
   ln -sf /usr/src/$pkgbase $modulesdir/build
-  install -Dm644 arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-custom
+  install -Dm644 arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-linux-custom
 }
