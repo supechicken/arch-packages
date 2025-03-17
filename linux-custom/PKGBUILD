@@ -1,5 +1,5 @@
 pkgname=linux-custom
-pkgver=6.6.65
+pkgver=6.12.17
 pkgrel=1
 arch=(x86_64)
 license=(GPL-2.0-only)
@@ -26,30 +26,17 @@ makedepends=(
 options=(!strip)
 
 source=(
-  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.6.65-linux-241218T004222Z.tar.gz
-  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.6.65-2/linux-lts-6.6.65-2.tar.gz
-  https://gitlab.com/xanmod/linux-patches/-/archive/72c888e879f321c68e1e1a91d1ef9e5996fe518a/linux-patches-72c888e879f321c68e1e1a91d1ef9e5996fe518a.tar.gz
-  config  # the main kernel config file
+  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.17-linux-250228T052357Z.tar.gz
+  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.17-1/linux-lts-6.12.17-1.tar.gz
+  https://gitlab.com/xanmod/linux-patches/-/archive/master/linux-patches-master.tar.gz
+  0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
+  jumper-config  # the main kernel config file
 )
 
-sha256sums=(SKIP SKIP SKIP SKIP)
-
-#_openwrt_patches=(
-#  ../openwrt-*/target/linux/generic/backport-6.6/6*.patch
-#  ../openwrt-*/target/linux/generic/backport-6.6/700-v6.10-net-create-a-dummy-net_device-allocator.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/645-netfilter-connmark-introduce-set-dscpmark.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/650-netfilter-add-xt_FLOWOFFLOAD-target.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/660-fq_codel_defaults.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/661-kernel-ct-size-the-hashtable-more-adequately.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/721-net-add-packet-mangeling.patch
-#  ../openwrt-*/target/linux/generic/hack-6.6/790-SFP-GE-T-ignore-TX_FAULT.patch
-#  ../openwrt-*/target/linux/generic/pending-6.6/150-bridge_allow_receiption_on_disabled_port.patch
-#  ../openwrt-*/target/linux/generic/pending-6.6/151-net-bridge-do-not-send-arp-replies-if-src-and-target.patch
-#  ../openwrt-*/target/linux/generic/pending-6.6/6*.patch
-#  ../openwrt-*/target/linux/generic/pending-6.6/7*-{netfilter,bridge}*.patch
-#)
+sha256sums=(SKIP SKIP SKIP SKIP SKIP)
 
 _patches=(
+  ../0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   ../linux-lts-*/*.patch # arch patches
   ../linux-patches-*/linux-6.6.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
 )
@@ -69,9 +56,10 @@ prepare() {
   shopt -u nullglob
 
   echo "Setting config..."
-  cp ../config .config
+  scripts/kconfig/merge_config.sh -m ../linux-lts-6.*/config ../jumper-config
+  
   make ARCH=x86_64 LLVM=1 LLVM_IAS=1 olddefconfig
-  diff -Nur --color ../config .config || :
+  diff -Nur --color ../linux-lts-6.*/config .config || true
 
   make -s kernelrelease > version
   echo "Prepared $pkgbase version $(<version)"
@@ -112,5 +100,5 @@ package() {
   cp -r . $pkgdir/usr/src/$pkgbase
 
   ln -sf /usr/src/$pkgbase $modulesdir/build
-  install -Dm644 arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-custom
+  install -Dm644 arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-linux-custom
 }

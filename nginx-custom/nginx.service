@@ -10,7 +10,7 @@ PrivateDevices=yes
 PrivateTmp=true
 SyslogLevel=err
 
-ExecStart=/usr/bin/nginx
+ExecStart=/usr/bin/nginx -c /etc/tvbox-configs/nginx/nginx.conf
 ExecReload=/usr/bin/nginx -s reload
 Restart=on-failure
 KillMode=mixed
