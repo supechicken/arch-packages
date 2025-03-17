@@ -1,0 +1,51 @@
+pkgname=cage-custom
+pkgver=0.2.0
+pkgrel=3
+pkgdesc="A kiosk compositor for Wayland"
+arch=(x86_64)
+url="https://www.hjdskes.nl/projects/cage/"
+license=(MIT)
+depends=(
+  'glibc'
+  'wayland'
+  'wlroots'
+)
+makedepends=(
+  'git'
+  'libxkbcommon'
+  'meson'
+  'scdoc'
+  'wayland-protocols'
+  'xorg-server-xwayland'
+)
+provides=('wayland-compositor')
+optdepends=(
+  'polkit: System privilege control. Required if not using seatd service'
+  'xorg-server-xwayland: X11 support'
+)
+# It's not uncommon to need to update to the latest commit so we use git-based
+# fetching.
+source=("git+https://github.com/supechicken/cage.git")
+install=cage.install
+sha512sums=('fbf43968560ee4d83ade87804aac9dbc8fe61f783909bad5a4403937d7f0070894373bc21fab9f1d1e425126a9b86c99c2acb5fee30f7cc9b23c40e453c9df21')
+validpgpkeys=(
+    '13B6A35E9FD677D02CD68DBE37C445296EBC43B1' # Jente Hidskes <dev@hjdskes.nl>
+    '34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48' # Simon Ser <contact@emersion.fr>
+)
+
+build() {
+  arch-meson "$pkgname" build
+  ninja -C build
+}
+
+check() {
+  ninja -C build test
+}
+
+package() {
+  depends+=(libwlroots-0.18.so libxkbcommon.so)
+
+  DESTDIR="${pkgdir}" ninja -C build install
+  install -vDm 644 "$pkgname/README.md" -t "${pkgdir}/usr/share/doc/${pkgname}"
+  install -vDm 644 "$pkgname/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
+}
