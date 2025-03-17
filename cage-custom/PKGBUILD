@@ -27,11 +27,7 @@ optdepends=(
 # fetching.
 source=("git+https://github.com/supechicken/cage.git")
 install=cage.install
-sha512sums=('fbf43968560ee4d83ade87804aac9dbc8fe61f783909bad5a4403937d7f0070894373bc21fab9f1d1e425126a9b86c99c2acb5fee30f7cc9b23c40e453c9df21')
-validpgpkeys=(
-    '13B6A35E9FD677D02CD68DBE37C445296EBC43B1' # Jente Hidskes <dev@hjdskes.nl>
-    '34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48' # Simon Ser <contact@emersion.fr>
-)
+sha512sums=('SKIP')
 
 build() {
   arch-meson "$pkgname" build
