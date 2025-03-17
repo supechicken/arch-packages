@@ -30,7 +30,7 @@ install=cage.install
 sha512sums=('SKIP')
 
 build() {
-  arch-meson "$pkgname" build
+  arch-meson cage build
   ninja -C build
 }
 
@@ -42,6 +42,6 @@ package() {
   depends+=(libwlroots-0.18.so libxkbcommon.so)
 
   DESTDIR="${pkgdir}" ninja -C build install
-  install -vDm 644 "$pkgname/README.md" -t "${pkgdir}/usr/share/doc/${pkgname}"
-  install -vDm 644 "$pkgname/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
+  install -vDm 644 "cage/README.md" -t "${pkgdir}/usr/share/doc/${pkgname}"
+  install -vDm 644 "cage/LICENSE" -t "${pkgdir}/usr/share/licenses/${pkgname}"
 }
