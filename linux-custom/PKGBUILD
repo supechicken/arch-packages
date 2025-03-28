@@ -1,5 +1,5 @@
 pkgname=linux-custom
-pkgver=6.12.17
+pkgver=6.12.19
 pkgrel=1
 arch=(x86_64)
 license=(GPL-2.0-only)
