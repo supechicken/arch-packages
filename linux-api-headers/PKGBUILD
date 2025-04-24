@@ -1,0 +1,10 @@
+pkgname=linux-api-headers
+pkgver=9.99.9
+pkgrel=1
+arch=(x86_64)
+license=(GPL-2.0-only)
+
+options=(!strip)
+source=(/dev/null)
+
+sha256sums=(SKIP)
