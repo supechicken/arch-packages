@@ -1,7 +1,5 @@
 pkgbase=linux-firmware
-pkgname=(linux-firmware-whence linux-firmware amd-ucode
-         linux-firmware-{nfp,mellanox,marvell,qcom,liquidio,qlogic,bnx2x}
-)
+pkgname=(linux-firmware-whence linux-firmware amd-ucode)
 
 #_commit=c979a06518069901e4c43e0019d3a15b435b7e16
 pkgver=20250427
