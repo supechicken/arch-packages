@@ -100,5 +100,6 @@ package() {
   cp -r . $pkgdir/usr/src/$pkgbase
 
   ln -sf /usr/src/$pkgbase $modulesdir/build
+  sbsign --key /etc/secureboot/DB.key --cert /etc/secureboot/DB.crt --output arch/x86/boot/bzImage arch/x86/boot/bzImage
   install -Dm644 arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-linux-custom
 }
