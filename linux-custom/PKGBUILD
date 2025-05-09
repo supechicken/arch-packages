@@ -3,8 +3,7 @@ pkgver=6.12.23
 pkgrel=1
 arch=(x86_64)
 license=(GPL-2.0-only)
-provides=(linux-lts linux-lts-headers)
-conflicts=(linux-lts linux-lts-headers)
+conflicts=(linux-lts linux)
 
 makedepends=(
   llvm
@@ -26,8 +25,8 @@ makedepends=(
 options=(!strip)
 
 source=(
-  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.23-linux-250419T011850Z.tar.gz
-  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.23-1/linux-lts-6.12.23-1.tar.gz
+  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.24-linux-250501T040919Z.tar.gz
+  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.24-1/linux-lts-6.12.24-1.tar.gz
   https://gitlab.com/xanmod/linux-patches/-/archive/master/linux-patches-master.tar.gz
   0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   jumper-config  # the main kernel config file
@@ -42,7 +41,7 @@ _patches=(
 )
 
 export SRCNAME=linux-intel-lts-lts-*/
-export KBUILD_BUILD_HOST=Jumper-MiniPC
+export KBUILD_BUILD_HOST=MaxsunHTPC
 export KBUILD_BUILD_USER=supechicken
 
 prepare() {
