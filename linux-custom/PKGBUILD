@@ -41,7 +41,7 @@ _patches=(
 )
 
 export SRCNAME=linux-intel-lts-lts-*/
-export KBUILD_BUILD_HOST=MaxsunHTPC
+export KBUILD_BUILD_HOST=Maxsun-HTPC
 export KBUILD_BUILD_USER=supechicken
 
 prepare() {
