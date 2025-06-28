@@ -38,6 +38,7 @@ _patches=(
   ../0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   ../linux-lts-*/*.patch # arch patches
   ../linux-patches-*/linux-6.12.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
+  ../linux-patches-*/linux-6.12.y-xanmod/pci_acso/*.patch
 )
 
 export SRCNAME=linux-intel-lts-lts-*/
