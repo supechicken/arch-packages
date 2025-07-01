@@ -27,16 +27,19 @@ options=(!strip)
 source=(
   https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.34-linux-250619T163003Z.tar.gz
   https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.34-1/linux-lts-6.12.34-1.tar.gz
+  https://github.com/immortalwrt/immortalwrt/archive/refs/heads/master.tar.gz
   https://gitlab.com/xanmod/linux-patches/-/archive/master/linux-patches-master.tar.gz
   0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   jumper-config  # the main kernel config file
 )
 
-sha256sums=(SKIP SKIP SKIP SKIP SKIP)
+sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP)
 
 _patches=(
   ../0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   ../linux-lts-*/*.patch # arch patches
+  ../immortalwrt*/target/linux/generic/{backport,pending}-6.12/
+  ../immortalwrt*/target/linux/generic/hack-6.12/6*.patch
   ../linux-patches-*/linux-6.12.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
 )
 
