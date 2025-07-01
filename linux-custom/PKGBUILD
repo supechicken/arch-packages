@@ -40,7 +40,7 @@ _patches=(
   ../linux-lts-*/*.patch # arch patches
   ../immortalwrt*/target/linux/generic/backport-6.12/*.patch
   ../immortalwrt*/target/linux/generic/{pending,hack}-6.12/6*.patch
-  ../immortalwrt*/target/linux/generic/pending-6.12/7*.patch
+  ../immortalwrt*/target/linux/generic/pending-6.12/7*-netfilter*.patch
   ../immortalwrt*/target/linux/x86/patches-6.12/*.patch
   ../linux-patches-*/linux-6.12.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
 )
