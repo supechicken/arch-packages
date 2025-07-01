@@ -38,8 +38,9 @@ sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP)
 _patches=(
   ../0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   ../linux-lts-*/*.patch # arch patches
-  ../immortalwrt*/target/linux/generic/{backport,pending}-6.12/*.patch
-  ../immortalwrt*/target/linux/generic/hack-6.12/6*.patch
+  ../immortalwrt*/target/linux/generic/backport-6.12/*.patch
+  ../immortalwrt*/target/linux/generic/{pending,hack}-6.12/{6,7}*.patch
+  ../immortalwrt*/target/linux/x86/patches-6.12/*.patch
   ../linux-patches-*/linux-6.12.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
 )
 
