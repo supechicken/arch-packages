@@ -48,7 +48,7 @@ _patches=(
   ../linux-patches-*/linux-6.12.y-xanmod/kconfig/0002-x86-kconfig-more-ISA-levels-and-uarches.patch
 )
 
-export SRCNAME=linux-intel-lts-lts-v*-linux-2*/
+export SRCNAME=linux-intel-lts-lts-v*-linux-fixed/
 export KBUILD_BUILD_HOST=Maxsun-HTPC
 export KBUILD_BUILD_USER=supechicken
 
