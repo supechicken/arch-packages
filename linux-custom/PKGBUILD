@@ -30,21 +30,20 @@ source=(
   https://github.com/immortalwrt/immortalwrt/archive/refs/heads/master.tar.gz
   https://gitlab.com/xanmod/linux-patches/-/archive/master/linux-patches-master.tar.gz
   0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
-  more-ISA-levels-and-uarches-for-kernel-6.1.79+.patch
   jumper-config  # the main kernel config file
 )
 
-sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP SKIP)
+sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP)
 
 _patches=(
   ../0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
-  ../more-ISA-levels-and-uarches-for-kernel-6.1.79+.patch
   ../linux-lts-*/*.patch # arch patches
   ../immortalwrt*/target/linux/generic/backport-6.12/*.patch
   ../immortalwrt*/target/linux/generic/{pending,hack}-6.12/6*.patch
   ../immortalwrt*/target/linux/generic/pending-6.12/7*-netfilter*.patch
   ../immortalwrt*/target/linux/x86/patches-6.12/*.patch
   ../linux-patches-*/linux-6.12.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
+  ../linux-patches-*/linux-6.12.y-xanmod/kconfig/0002-x86-kconfig-more-ISA-levels-and-uarches.patch
 )
 
 export SRCNAME=linux-intel-lts-lts-*/
