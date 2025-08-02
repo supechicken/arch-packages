@@ -43,6 +43,7 @@ _patches=(
   ../immortalwrt*/target/linux/generic/pending-6.12/7*-netfilter*.patch
   ../immortalwrt*/target/linux/x86/patches-6.12/*.patch
   ../linux-patches-*/linux-6.12.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
+  ../linux-patches-*/linux-6.12.y-xanmod/net/netfilter/0001-netfilter-Add-netfilter-nf_tables-fullcone-support.patch
   ../linux-patches-*/linux-6.12.y-xanmod/kconfig/0002-x86-kconfig-more-ISA-levels-and-uarches.patch
 )
 
