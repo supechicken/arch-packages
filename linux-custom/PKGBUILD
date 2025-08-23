@@ -1,5 +1,5 @@
 pkgname=linux-custom
-pkgver=6.12.40
+pkgver=6.12.41
 pkgrel=1
 arch=(x86_64)
 license=(GPL-2.0-only)
@@ -25,8 +25,8 @@ makedepends=(
 options=(!strip)
 
 source=(
-  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.40-linux-250728T040815Z.tar.gz
-  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.40-1/linux-lts-6.12.40-1.tar.gz
+  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.41-linux-250811T220439Z.tar.gz
+  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.41-1/linux-lts-6.12.41-1.tar.gz
   https://github.com/immortalwrt/immortalwrt/archive/refs/heads/master.tar.gz
   https://gitlab.com/xanmod/linux-patches/-/archive/master/linux-patches-master.tar.gz
   0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
