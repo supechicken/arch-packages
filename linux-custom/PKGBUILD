@@ -1,5 +1,5 @@
-pkgname=linux-custom
-pkgver=6.12.41
+pkgbase=linux-custom
+pkgver=6.16.5
 pkgrel=1
 arch=(x86_64)
 license=(GPL-2.0-only)
@@ -24,27 +24,22 @@ makedepends=(
 
 options=(!strip)
 
+_srcname=linux-${pkgver}
+_srctag=v${pkgver}-arch1
+
 source=(
-  https://github.com/intel/linux-intel-lts/archive/refs/tags/lts-v6.12.41-linux-250811T220439Z.tar.gz
-  https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/archive/6.12.41-1/linux-lts-6.12.41-1.tar.gz
-  https://github.com/immortalwrt/immortalwrt/archive/refs/heads/master.tar.gz
+  https://cdn.kernel.org/pub/linux/kernel/v${pkgver}.x/${_srcname}.tar.xz
+  https://github.com/archlinux/linux/releases/download/$_srctag/linux-$_srctag.patch.zst
+  https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/archive/6.16.5.arch1-1/linux-6.16.5.arch1-1.tar.gz
   https://gitlab.com/xanmod/linux-patches/-/archive/master/linux-patches-master.tar.gz
-  0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
   jumper-config  # the main kernel config file
 )
 
-sha256sums=(SKIP SKIP SKIP SKIP SKIP SKIP)
+sha256sums=(SKIP SKIP SKIP SKIP SKIP)
 
 _patches=(
-  ../0001-ANDROID-dma-buf-heaps-Add-a-sysfs-file-to-report-tot.patch
-  ../linux-lts-*/*.patch # arch patches
-  ../immortalwrt*/target/linux/generic/backport-6.12/*.patch
-  ../immortalwrt*/target/linux/generic/{pending,hack}-6.12/6*.patch
-  ../immortalwrt*/target/linux/generic/pending-6.12/7*-netfilter*.patch
-  ../immortalwrt*/target/linux/x86/patches-6.12/*.patch
-  ../linux-patches-*/linux-6.12.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
-  ../linux-patches-*/linux-6.12.y-xanmod/net/netfilter/0001-netfilter-Add-netfilter-nf_tables-fullcone-support.patch
-  ../linux-patches-*/linux-6.12.y-xanmod/kconfig/0002-x86-kconfig-more-ISA-levels-and-uarches.patch
+  ../linux-patches-*/linux-6.16.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
+  ../linux-patches-*/linux-6.16.y-xanmod/kconfig/0002-x86-kconfig-more-ISA-levels-and-uarches.patch
 )
 
 export SRCNAME=linux-intel-lts-lts-v*/
@@ -52,7 +47,17 @@ export KBUILD_BUILD_HOST=MaxsunHTPC
 export KBUILD_BUILD_USER=supechicken
 
 prepare() {
-  cd $SRCNAME
+  cd $_srcname
+
+  local src
+  for src in "${source[@]}"; do
+    src="${src%%::*}"
+    src="${src##*/}"
+    src="${src%.zst}"
+    [[ $src = *.patch ]] || continue
+    echo "Applying patch $src..."
+    patch -Np1 < "../$src"
+  done
 
   shopt -s nullglob
   for p in ${_patches[@]}; do
@@ -71,19 +76,39 @@ prepare() {
 }
 
 build() {
-  cd $SRCNAME
+  cd $_srcname
 
   make ARCH=x86_64 LLVM=1 LLVM_IAS=1 bzImage -j$(nproc)
   make ARCH=x86_64 LLVM=1 LLVM_IAS=1 modules -j$(nproc)
 }
 
-package() {
+_package() {
+  pkgdesc="The $pkgdesc kernel and modules"
+  depends=(
+    coreutils
+    initramfs
+    kmod
+  )
+  optdepends=(
+    'linux-firmware: firmware images needed for some devices'
+    'scx-scheds: to use sched-ext schedulers'
+    'wireless-regdb: to set the correct wireless channels of your country'
+  )
+  provides=(
+    KSMBD-MODULE
+    NTSYNC-MODULE
+    VIRTUALBOX-GUEST-MODULES
+    WIREGUARD-MODULE
+  )
+  replaces=(
+    virtualbox-guest-modules-arch
+    wireguard-arch
+  )
+
   mkdir -p $pkgdir/{boot,usr}
-  cd $SRCNAME
+  cd $_srcname
 
   local modulesdir="$pkgdir/usr/lib/modules/$(<version)"
-
-  make ARCH=x86_64 LLVM=1 LLVM_IAS=1 INSTALL_HDR_PATH=$pkgdir/usr headers_install -j$(nproc)
 
   ZSTD_CLEVEL=19 make \
     ARCH=x86_64 LLVM=1 LLVM_IAS=1 \
@@ -108,3 +133,102 @@ package() {
   sbsign --key /etc/secureboot/DB.key --cert /etc/secureboot/DB.crt --output arch/x86/boot/bzImage arch/x86/boot/bzImage
   install -Dm644 arch/x86/boot/bzImage $pkgdir/boot/vmlinuz-linux-custom
 }
+
+_package-headers() {
+  pkgdesc="Headers and scripts for building modules for the $pkgdesc kernel"
+  depends=(pahole)
+
+  cd $_srcname
+  local builddir="$pkgdir/usr/lib/modules/$(<version)/build"
+
+  msg2 "Installing build files..."
+  install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map \
+    localversion.* version vmlinux tools/bpf/bpftool/vmlinux.h
+  install -Dt "$builddir/kernel" -m644 kernel/Makefile
+  install -Dt "$builddir/arch/x86" -m644 arch/x86/Makefile
+  cp -t "$builddir" -a scripts
+  ln -srt "$builddir" "$builddir/scripts/gdb/vmlinux-gdb.py"
+
+  # required when STACK_VALIDATION is enabled
+  install -Dt "$builddir/tools/objtool" tools/objtool/objtool
+
+  # required when DEBUG_INFO_BTF_MODULES is enabled
+  install -Dt "$builddir/tools/bpf/resolve_btfids" tools/bpf/resolve_btfids/resolve_btfids
+
+  msg2 "Installing headers..."
+  cp -t "$builddir" -a include
+  cp -t "$builddir/arch/x86" -a arch/x86/include
+  install -Dt "$builddir/arch/x86/kernel" -m644 arch/x86/kernel/asm-offsets.s
+
+  install -Dt "$builddir/drivers/md" -m644 drivers/md/*.h
+  install -Dt "$builddir/net/mac80211" -m644 net/mac80211/*.h
+
+  # https://bugs.archlinux.org/task/13146
+  install -Dt "$builddir/drivers/media/i2c" -m644 drivers/media/i2c/msp3400-driver.h
+
+  # https://bugs.archlinux.org/task/20402
+  install -Dt "$builddir/drivers/media/usb/dvb-usb" -m644 drivers/media/usb/dvb-usb/*.h
+  install -Dt "$builddir/drivers/media/dvb-frontends" -m644 drivers/media/dvb-frontends/*.h
+  install -Dt "$builddir/drivers/media/tuners" -m644 drivers/media/tuners/*.h
+
+  # https://bugs.archlinux.org/task/71392
+  install -Dt "$builddir/drivers/iio/common/hid-sensors" -m644 drivers/iio/common/hid-sensors/*.h
+
+  echo "Installing KConfig files..."
+  find . -name 'Kconfig*' -exec install -Dm644 {} "$builddir/{}" \;
+
+  msg2 "Installing Rust files..."
+  [ -f rust/*.rmeta ] && install -Dt "$builddir/rust" -m644 rust/*.rmeta
+  [ -f rust/*.so ] && install -Dt "$builddir/rust" rust/*.so
+
+  msg2 "Installing unstripped VDSO..."
+  make INSTALL_MOD_PATH="$pkgdir/usr" vdso_install \
+    link=  # Suppress build-id symlinks
+
+  msg2 "Removing unneeded architectures..."
+  local arch
+  for arch in "$builddir"/arch/*/; do
+    [[ $arch = */x86/ ]] && continue
+    echo "Removing $(basename "$arch")"
+    rm -r "$arch"
+  done
+
+  msg2 "Removing documentation..."
+  rm -rf "$builddir/Documentation"
+
+  msg2 "Removing broken symlinks..."
+  find -L "$builddir" -type l -printf 'Removing %P\n' -delete
+
+  msg2 "Removing loose objects..."
+  find "$builddir" -type f -name '*.o' -printf 'Removing %P\n' -delete
+
+  msg2 "Stripping build tools..."
+  local file
+  while read -rd '' file; do
+    case "$(file -Sib "$file")" in
+      application/x-sharedlib\;*)      # Libraries (.so)
+        strip -v $STRIP_SHARED "$file" ;;
+      application/x-archive\;*)        # Libraries (.a)
+        strip -v $STRIP_STATIC "$file" ;;
+      application/x-executable\;*)     # Binaries
+        strip -v $STRIP_BINARIES "$file" ;;
+      application/x-pie-executable\;*) # Relocatable binaries
+        strip -v $STRIP_SHARED "$file" ;;
+    esac
+  done < <(find "$builddir" -type f -perm -u+x ! -name vmlinux -print0)
+
+  msg2 "Stripping vmlinux..."
+  strip -v $STRIP_STATIC "$builddir/vmlinux"
+
+  msg2 "Adding symlink..."
+  mkdir -p "$pkgdir/usr/src"
+  ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
+}
+
+pkgname=("${pkgbase}" "${pkgbase}-headers")
+for _p in "${pkgname[@]}"; do
+  eval "package_$_p() {
+    $(declare -f "_package${_p#$pkgbase}")
+    _package${_p#$pkgbase}
+  }"
+done
