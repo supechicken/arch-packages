@@ -28,7 +28,7 @@ _srcname=linux-${pkgver}
 _srctag=v${pkgver}-arch1
 
 source=(
-  https://cdn.kernel.org/pub/linux/kernel/v${pkgver}.x/${_srcname}.tar.xz
+  https://cdn.kernel.org/pub/linux/kernel/v${pkgver%%.*}.x/${_srcname}.tar.xz
   https://github.com/archlinux/linux/releases/download/$_srctag/linux-$_srctag.patch.zst
   https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/archive/6.16.5.arch1-1/linux-6.16.5.arch1-1.tar.gz
   https://gitlab.com/xanmod/linux-patches/-/archive/master/linux-patches-master.tar.gz
