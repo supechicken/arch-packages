@@ -1,5 +1,5 @@
 pkgbase=linux-intel-lts
-pkgver=6.12.45
+pkgver=6.12.42
 pkgrel=1
 pkgdesc='Intel LTS Linux'
 url='https://www.kernel.org'
@@ -28,7 +28,7 @@ options=(
 _arch_tag=$pkgver-1
 _arch_git=https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/raw/$_arch_tag
 
-_srctag=lts-v6.12.40-linux-250728T040815Z
+_srctag=lts-v6.12.42-linux-250819T115223Z
 _srcname=linux-intel-lts-$_srctag
 
 _patches=(
@@ -63,7 +63,7 @@ prepare() {
   echo "${pkgbase#linux}" > localversion.20-pkgname
 
   local p
-  for p in "${_patch[@]}"; do
+  for p in "${_patches[@]}"; do
     echo "Applying patch $p..."
     patch -Np1 < $p
   done
@@ -72,7 +72,7 @@ prepare() {
   scripts/kconfig/merge_config.sh -m ../config ../custom-config
   make LLVM=1 LLVM_IAS=1 ARCH=x86_64 olddefconfig
 
-  diff -u ../config .config || :
+  diff -Nur --color ../config .config || :
 
   make LLVM=1 LLVM_IAS=1 ARCH=x86_64 -s kernelrelease > version
   echo "Prepared $pkgbase version $(<version)"
