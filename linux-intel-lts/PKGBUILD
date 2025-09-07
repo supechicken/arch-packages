@@ -81,11 +81,8 @@ prepare() {
 build() {
   cd $_srcname
 
-  # make LLVM=1 LLVM_IAS=1 ARCH=x86_64 htmldocs &
-  local pid_docs=$!
   make LLVM=1 LLVM_IAS=1 ARCH=x86_64 all -j "$(nproc)"
   make LLVM=1 LLVM_IAS=1 ARCH=x86_64 -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
-  wait "${pid_docs}"
 }
 
 _package() {
