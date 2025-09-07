@@ -63,7 +63,7 @@ prepare() {
   echo "${pkgbase#linux}" > localversion.20-pkgname
 
   local p
-  for p in "${_patches[@]}"; do
+  for p in ${_patches[@]}; do
     echo "Applying patch $p..."
     patch -Np1 < $p
   done
