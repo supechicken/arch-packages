@@ -77,21 +77,21 @@ prepare() {
 
   echo "Setting config..."
   scripts/kconfig/merge_config.sh -m ../config ../custom-config
-  make olddefconfig
+  make LLVM=1 LLVM_IAS=1 ARCH=x86_64 olddefconfig
 
   diff -u ../config .config || :
 
-  make -s kernelrelease > version
+  make LLVM=1 LLVM_IAS=1 ARCH=x86_64 -s kernelrelease > version
   echo "Prepared $pkgbase version $(<version)"
 }
 
 build() {
   cd $_srcname
 
-  make htmldocs &
+  make LLVM=1 LLVM_IAS=1 ARCH=x86_64 htmldocs &
   local pid_docs=$!
-  make all
-  make -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
+  make LLVM=1 LLVM_IAS=1 ARCH=x86_64 all
+  make LLVM=1 LLVM_IAS=1 ARCH=x86_64 -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
   wait "${pid_docs}"
 }
 
@@ -172,7 +172,7 @@ _package() {
   echo "$pkgbase" | install -Dm644 /dev/stdin "$modulesdir/pkgbase"
 
   echo "Installing modules..."
-  ZSTD_CLEVEL=19 make INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \
+  ZSTD_CLEVEL=19 make LLVM=1 LLVM_IAS=1 ARCH=x86_64 INSTALL_MOD_PATH="$pkgdir/usr" INSTALL_MOD_STRIP=1 \
     DEPMOD=/doesnt/exist modules_install  # Suppress depmod
 
   # remove build link
