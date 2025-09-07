@@ -51,6 +51,7 @@ source=(
   $_arch_git/0002-Default-to-maximum-amount-of-ASLR-bits.patch
   $_arch_git/0003-skip-simpledrm-if-nvidia-drm.modeset\=1-is.patch
   $_arch_git/config  # the main kernel config file
+  custom-config
 )
 
 sha256sums=('SKIP'
@@ -58,11 +59,8 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP'
+            'SKIP'
             'SKIP')
-
-export KBUILD_BUILD_HOST=archlinux
-export KBUILD_BUILD_USER=$pkgbase
-export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EPOCH})"
 
 prepare() {
   cd $_srcname
@@ -78,8 +76,9 @@ prepare() {
   done
 
   echo "Setting config..."
-  cp ../config .config
+  scripts/kconfig/merge_config.sh -m ../config ../custom-config
   make olddefconfig
+
   diff -u ../config .config || :
 
   make -s kernelrelease > version
