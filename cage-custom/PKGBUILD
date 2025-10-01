@@ -8,7 +8,7 @@ license=(MIT)
 depends=(
   'glibc'
   'wayland'
-  'wlroots'
+  'wlroots0.19'
 )
 makedepends=(
   'git'
@@ -39,7 +39,7 @@ check() {
 }
 
 package() {
-  depends+=(libwlroots-0.18.so libxkbcommon.so)
+  depends+=(libwlroots-0.19.so libxkbcommon.so)
 
   DESTDIR="${pkgdir}" ninja -C build install
   install -vDm 644 "cage/README.md" -t "${pkgdir}/usr/share/doc/${pkgname}"
