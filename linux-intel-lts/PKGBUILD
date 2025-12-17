@@ -35,6 +35,7 @@ _patches=(
   ../*.patch # arch patches
   ../linux-patches-*/linux-6.12.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
   ../linux-patches-*/linux-6.12.y-xanmod/kconfig/0002-x86-kconfig-more-ISA-levels-and-uarches.patch
+  ../linux-patches-*/linux-6.12.y-xanmod/pci_acso/0001-PCI-Enable-overrides-for-missing-ACS-capabilities.patch
 )
 
 source=(
