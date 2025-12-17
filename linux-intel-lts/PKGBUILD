@@ -1,5 +1,5 @@
 pkgbase=linux-intel-lts
-pkgver=6.12.58
+pkgver=6.12.61
 pkgrel=1
 pkgdesc='Intel LTS Linux'
 url='https://www.kernel.org'
@@ -28,7 +28,7 @@ options=(
 _arch_tag=$pkgver-1
 _arch_git=https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/raw/$_arch_tag
 
-_srctag=lts-v6.12.58-linux-251114T045655Z
+_srctag=lts-v6.12.61-linux-251210T000847Z
 _srcname=linux-intel-lts-$_srctag
 
 _patches=(
