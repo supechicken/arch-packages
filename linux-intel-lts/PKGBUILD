@@ -35,7 +35,6 @@ _patches=(
   ../*.patch # arch patches
   ../linux-patches-*/linux-6.12.y-xanmod/net/tcp/{bbr3,cloudflare}/*.patch # network patches
   ../linux-patches-*/linux-6.12.y-xanmod/kconfig/0002-x86-kconfig-more-ISA-levels-and-uarches.patch
-  ../linux-patches-*/linux-6.12.y-xanmod/pci_acso/0001-PCI-Enable-overrides-for-missing-ACS-capabilities.patch
 )
 
 source=(
@@ -45,6 +44,7 @@ source=(
   $_arch_git/0002-Default-to-maximum-amount-of-ASLR-bits.patch
   $_arch_git/0003-skip-simpledrm-if-nvidia-drm.modeset\=1-is.patch
   $_arch_git/config  # the main kernel config file
+  0001-PCI-Enable-overrides-for-missing-ACS-capabilities.patch
   custom-config
 )
 
