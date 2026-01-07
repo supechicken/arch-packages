@@ -28,7 +28,7 @@ options=(
 _arch_tag=$pkgver-1
 _arch_git=https://gitlab.archlinux.org/archlinux/packaging/packages/linux-lts/-/raw/$_arch_tag
 
-_srctag=lts-v6.12.61-linux-251210T000847Z
+_srctag=lts-v6.12.61-linux-251229T065211Z
 _srcname=linux-intel-lts-$_srctag
 
 _patches=(
